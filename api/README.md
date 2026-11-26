@@ -21,6 +21,15 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
+The `.env` file in this directory points to the Compose database host `db`,
+which does not resolve outside Compose. Before a local run, set `DATABASE_URL`
+to a PostgreSQL server you can reach; a variable set in your shell takes
+precedence over the file:
+
+```powershell
+$env:DATABASE_URL = 'postgresql://user:password@localhost:5432/database'
+```
+
 Start the API:
 
 ```powershell
@@ -71,7 +80,7 @@ interactive documentation.
 ## Optional PostgreSQL inference logging
 
 If `DATABASE_URL` is set, the API creates an `inferences` table at startup and
-stores each prediction's four input measurements, predicted class ID, and
+stores each prediction's four input measurements, predicted species, and
 timestamp. If the variable is not set, predictions are served without database
 logging. The PostgreSQL server must be reachable by the API, and the configured
 database credentials must permit creating the table and inserting rows.

@@ -1,0 +1,4 @@
+# Compose passes api/.env through env_file, so it does not belong in the image
+.env
+.venv/
+__pycache__/

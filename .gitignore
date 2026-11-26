@@ -159,6 +159,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# The assignment requires api/.env to be submitted with the repository.
+# It only holds the local Compose database credentials.
+!api/.env
+
 # Spyder project settings
 .spyderproject
 .spyproject

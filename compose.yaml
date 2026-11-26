@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      # Must match DATABASE_URL in api/.env
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: iris
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # -h 127.0.0.1 checks TCP, so the temporary socket-only server that runs
+      # during first-time initialisation is not reported as healthy
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d iris"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./api
+    env_file: api/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  ui:
+    build: ./ui
+    environment:
+      API_URL: http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "8501:8501"
+
+volumes:
+  pgdata:
